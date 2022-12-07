@@ -1,0 +1,17 @@
+FROM ubuntu:latest
+WORKDIR /usr/src/app
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get install sudo
+RUN apt-get -y install curl
+RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+RUN apt-get install -y nodejs
+RUN sudo DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install postgresql-14
+COPY angular-app/backend/postgresql-express-batch/package.json .
+RUN npm install
+ENV POSTGRES_PASSWORD Trustno1
+ENV POSTGRES_DB postgres
+COPY angular-app/backend/postgresql-express-batch/ ./
+EXPOSE 5004
+
+ENTRYPOINT ["npm", "run", "create"]
+                               
